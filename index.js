@@ -15,12 +15,34 @@ wss.on('connection', (ws) => {
   ws.on('message', function incoming(data) {
     const [command, px] = data.toString().split(' ');
     //console.log(px);
+    //Move up
     if (command === 'mouse_up') {
       const mouse = robot.getMousePos();
-
       robot.moveMouse(mouse.x, mouse.y - px);
+
+      ws.send(`${command},${mouse.x},${mouse.y - px}`);
+      //position of mouse
     } else if (command === 'mouse_position') {
       const mouse = robot.getMousePos();
+
+      ws.send(`${command} ${mouse.x},${mouse.y}`);
+      //Move down
+    } else if (command === 'mouse_down') {
+      const mouse = robot.getMousePos();
+      robot.moveMouse(mouse.x, mouse.y + px);
+
+      ws.send(`${command} ${mouse.x},${mouse.y}`);
+      //Move left
+    } else if (command === 'mouse_left') {
+      const mouse = robot.getMousePos();
+      robot.moveMouse(mouse.x - px, mouse.y);
+
+      ws.send(`${command} ${mouse.x},${mouse.y}`);
+      //Move right
+    } else if (command === 'mouse_right') {
+      const mouse = robot.getMousePos();
+      robot.moveMouse(mouse.x + px, mouse.y);
+
       ws.send(`${command} ${mouse.x},${mouse.y}`);
     }
 
