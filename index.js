@@ -125,14 +125,13 @@ wss.on('connection', (ws) => {
         }
         image.bitmap.data.set(image.bitmap.data);
         image.write('screenshot.png');
-        const base64 = img.getBase64Async(Jimp.MIME_PNG);
-        ws.send(`${command} ${base64}`);
+        const base64 = img.getBase64Async(img.getMIME());
+        const data = base64.then((base64) => {
+          ws.send(`${command} ${base64}`);
+        })
       });
-
-      ws.send(`${command}`);
     }
-
-    console.log(data.toString().split(' '));
+    //console.log(data.toString().split(' '));
   });
 
   ws.on('close', () => {
